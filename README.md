@@ -285,7 +285,7 @@ The default parsers are defined in `NSerializeJson.parsers`. If you want to defi
 
 ## Use integer keys as array indexes ##
 
-By default, all serialized integer numbers are indices, so if you want serialize it as string keys you have to set `useNumKeysAsArrayIndex: false`:
+By default, all serialized integer numbers are indices, so if you want to serialize it as string keys you have to set the `useNumKeysAsArrayIndex: false`:
 
 ```html
 <form id="myForm">
@@ -304,7 +304,7 @@ NSerializeJson.serializeForm(document.getElementById("myForm") as HTMLFormElemen
 NSerializeJson.options.useNumKeysAsArrayIndex = true;
 NSerializeJson.serializeForm(document.getElementById("myForm") as HTMLFormElement);
 // arr is an array =>
-{'arr': ['foo', 'var', 'inn']}
+{'arr': ['foo', 'var', null, null, null, 'inn']}
 ```
 
 
