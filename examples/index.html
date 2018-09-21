@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="../dist/browser/nserializejson.min.js"></script>
+    <script src="main.js"></script>
+    <style>
+        .form-control {
+            margin-bottom: 10px !important;
+        }
+    </style>
+</head>
+<body>
+<div class="row" style="padding: 10px; margin: 0">
+    <div class="col-md-5">
+        <form id="myForm">
+            <label>
+                strbydefault
+                <input type="text" class="form-control" name="strbydefault" value=":string is the default (implicit) type" />
+            </label>
+            <label>
+                text:string
+                <input type="text" class="form-control" name="text:string" value=":string type can still be used to override other parsing options" />
+            </label>
+            <label>
+                excluded:skip
+                <input type="text" class="form-control" name="excluded:skip" value="Use :skip to not include this field in the result" />
+            </label>
+            <label>
+                numbers[0]:number
+                <input type="text" class="form-control" name="numbers[0]:number" value="0" />
+            </label>
+            <label>
+                numbers[1]:number
+                <input type="text" class="form-control" name="numbers[1]:number" value="1" />
+            </label>
+            <label>
+                keys[1.1]:number
+                <input type="text" class="form-control" name="keys[1.1]:number" value="1.1" />
+            </label>
+            <label>
+                bools[true]:boolean
+                <input type="text" class="form-control" name="bools[true]:boolean" value="true" />
+            </label>
+            <label>
+                bools[false]:boolean
+                <input type="text" class="form-control" name="bools[false]:boolean" value="false" />
+            </label>
+            <label>
+                bools[zero]:boolean
+                <input type="text" class="form-control" name="bools[zero]:boolean" value="0" />
+            </label>
+            <label>
+                autos[string]:auto
+                <input type="text" class="form-control" name="autos[string]:auto" value="text with stuff" />
+            </label>
+            <label>
+                autos[one]:auto
+                <input type="text" class="form-control" name="autos[one]:auto" value="1" />
+            </label>
+            <label>
+                autos[two]:auto
+                <input type="text" class="form-control" name="autos[two]:auto" value="2" />
+            </label>
+            <label>
+                autos[true]:auto
+                <input type="text" class="form-control" name="autos[true]:auto" value="true" />
+            </label>
+            <label>
+                autos[false]:auto
+                <input type="text" class="form-control" name="autos[false]:auto" value="false" />
+            </label>
+            <label>
+                autos[null]:auto
+                <input type="text" class="form-control" name="autos[null]:auto" value="null" />
+            </label>
+            <label>
+                autos[list]:auto
+                <input type="text" class="form-control" name="autos[list]:auto" value='1, 2, 3, foo, bar, {"pet": "cat"}' />
+            </label>
+            <label>
+                arrays[empty]:array[auto]
+                <input type="text" class="form-control" name="arrays[empty]:array[auto]" value="" />
+            </label>
+            <label>
+                arrays[auto]:array[auto]
+                <input type="text" class="form-control" name="arrays[auto]:array[auto]" value="1, 2, 3, foo, bar" />
+            </label>
+            <label>
+                arrays[number]:array[number]
+                <input type="text" class="form-control" name="arrays[numbers]:array[number]" value="1, 2, 3, foo, bar" />
+            </label>
+            <label>
+                json[empty]:json
+                <input type="text" class="form-control" name="json[empty]:json" value="{}" />
+            </label>
+            <label>
+                json[not empty]:json
+                <input type="text" class="form-control" name="json[not empty]:json" value='{"my": "stuff"}' />
+            </label>
+        </form>
+    </div>
+    
+    <div class="col-md-7">
+        <label class="col-md-12">
+            Output
+            <textarea id="output" class="form-control" style="height: 600px;"></textarea>
+        </label>
+    </div>
+</div>
+
+
+    <script>
+        init();
+    </script>
+</body>
+</html>

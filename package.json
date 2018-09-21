@@ -1,0 +1,45 @@
+{
+  "name": "nserializejson",
+  "version": "1.0.0",
+  "description": "JSON form serializer on Vanilla JS",
+  "scripts": {
+    "build:esm": "node ./node_modules/typescript/bin/tsc --project ./tsconfig.json --module es2015 --outDir ./dist/esm -d && node ./process-dts.js",
+    "build:cjs": "node ./node_modules/typescript/bin/tsc --project ./tsconfig.json --module commonjs --outDir ./dist/cjs",
+    "build": "npm run clean && npm run build:browser && npm run build:esm && npm run build:cjs",
+    "build:browser": "node ./node_modules/webpack/bin/webpack.js --config ./webpack.config.js --mode production",
+    "clean": "node ./node_modules/rimraf ./dist"
+  },
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "typings": "./dist/esm/index.d.ts",
+  "umd": "./dist/browser/nserializejson.min.js",
+  "umd_name": "NSerializeJson",
+  "devDependencies": {
+    "rimraf": "^2.6.2",
+    "uglify-js": "^3.4.7",
+    "babel-core": "^6.26.0",
+    "babel-jest": "^22.4.1",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-plugin-transform-object-assign": "^6.22.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-es2015-rollup": "^3.0.0",
+    "babel-plugin-add-module-exports": "0.3.3",
+    "babel-loader": "^7.1.5",
+    "webpack": "^4.16.5",
+    "webpack-cli": "^3.1.0",
+    "ts-loader": "^4.4.2",
+    "typescript": "^3.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NickMaev/NSerializeJson.git"
+  },
+  "author": "Nikolay Maev <trix.mnr@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NickMaev/NSerializeJson/issues"
+  },
+  "homepage": "https://github.com/NickMaev/NSerializeJson#readme"
+}

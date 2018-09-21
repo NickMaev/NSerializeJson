@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "allowUnusedLabels": false,
+    "baseUrl": ".",
+    "lib": [ "es5", "es6", "dom" ],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "preserveConstEnums": true,
+    "removeComments": true,
+    "skipDefaultLibCheck": true,
+    "sourceMap": true,
+    "strict": false,
+    "target": "es5"
+  },
+  "include": [
+    "src",
+    "./index.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/__tests__/*",
+    "../../node_modules/@types/*"
+  ]
+}
