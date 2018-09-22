@@ -1,3 +1,6 @@
+[![npm version](https://img.shields.io/npm/v/nserializejson.svg?style=flat-square)](https://www.npmjs.com/package/nserializejson)
+[![npm downloads](https://img.shields.io/npm/dm/nserializejson.svg?style=flat-square)](https://www.npmjs.com/package/nserializejson)
+
 # Description
 NSerializeJson is a Vanilla JS form serializer which serializes form data into JSON object.
 
