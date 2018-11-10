@@ -33,9 +33,16 @@ var NSerializeJson = (function () {
         checkedElements.forEach(function (x) { return _this.serializeIntoObject(resultObject, x); });
         return resultObject;
     };
-    NSerializeJson.serializeIntoObject = function (obj, htmlInputElement) {
-        var value = htmlInputElement.value;
-        var pathStr = htmlInputElement.getAttribute("name");
+    NSerializeJson.serializeIntoObject = function (obj, htmlElement) {
+        var value = null;
+        if (htmlElement.tagName.toLowerCase() === "select") {
+            var firstSelectOpt = Array.from(htmlElement.options).filter(function (x) { return x.selected; })[0];
+            value = firstSelectOpt.getAttribute("value");
+        }
+        else {
+            value = htmlElement.value;
+        }
+        var pathStr = htmlElement.getAttribute("name");
         if (Util_1.isStringNullOrEmpty(pathStr))
             return obj;
         var path = [];
@@ -49,7 +56,7 @@ var NSerializeJson = (function () {
             pathStr = pathStr.substring(0, typeIndex);
         }
         else {
-            type = htmlInputElement.getAttribute("data-value-type");
+            type = htmlElement.getAttribute("data-value-type");
         }
         if (this.options.onBeforeParseValue != null) {
             value = this.options.onBeforeParseValue(value, type);

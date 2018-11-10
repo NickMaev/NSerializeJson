@@ -5,6 +5,6 @@ export declare class NSerializeJson {
     static parsers: IValueParser[];
     private static parseValue;
     static serializeForm(htmlFormElement: HTMLFormElement): object;
-    static serializeIntoObject(obj: any, htmlInputElement: HTMLInputElement): any;
+    static serializeIntoObject(obj: any, htmlElement: HTMLElement): any;
     private static searchAndSet;
 }

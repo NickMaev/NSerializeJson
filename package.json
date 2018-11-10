@@ -1,6 +1,6 @@
 {
   "name": "nserializejson",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "JSON form serializer on Vanilla JS",
   "scripts": {
     "build:esm": "node ./node_modules/typescript/bin/tsc --project ./tsconfig.json --module es2015 --outDir ./dist/esm -d && node ./process-dts.js",

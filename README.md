@@ -1,5 +1,12 @@
+[![npm version](https://img.shields.io/npm/v/nserializejson.svg?style=flat-square)](https://www.npmjs.com/package/nserializejson)
+[![npm downloads](https://img.shields.io/npm/dm/nserializejson.svg?style=flat-square)](https://www.npmjs.com/package/nserializejson)
+
 # Description
 NSerializeJson is a Vanilla JS form serializer which serializes form data into JSON object.
+
+# Changes
+##### v. 1.0.1 (2018-11-10)
+`select` element parsing fix.
 
 # Usage
 
@@ -306,6 +313,3 @@ NSerializeJson.serializeForm(document.getElementById("myForm") as HTMLFormElemen
 // arr is an array =>
 {'arr': ['foo', 'var', null, null, null, 'inn']}
 ```
-
-
-

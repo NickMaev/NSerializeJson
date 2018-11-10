@@ -44,9 +44,15 @@ export class NSerializeJson {
         return resultObject;
     }
 
-    public static serializeIntoObject(obj: any, htmlInputElement: HTMLInputElement) : any {
-        var value = htmlInputElement.value;
-        var pathStr = htmlInputElement.getAttribute("name");
+    public static serializeIntoObject(obj: any, htmlElement: HTMLElement) : any {
+        var value = null;
+        if (htmlElement.tagName.toLowerCase() === "select") {
+            var firstSelectOpt = Array.from((htmlElement as any).options).filter(x => (x as any).selected)[0] as any;
+            value = firstSelectOpt.getAttribute("value");
+        } else {
+            value = (htmlElement as any).value;
+        }
+        var pathStr = htmlElement.getAttribute("name");
         if (isStringNullOrEmpty(pathStr))
             return obj;
         var path = [];
@@ -59,7 +65,7 @@ export class NSerializeJson {
             }
             pathStr = pathStr.substring(0, typeIndex);
         } else {
-            type = htmlInputElement.getAttribute("data-value-type");
+            type = htmlElement.getAttribute("data-value-type");
         }
 
         if (this.options.onBeforeParseValue != null) {
