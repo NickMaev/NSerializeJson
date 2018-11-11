@@ -11,7 +11,7 @@ var NSerializeJson = (function () {
         }
         var parser = this.parsers.filter(function (x) { return x.name === type; })[0];
         if (parser == null) {
-            throw pluginName + ": couldn't find ther parser for type '" + type + "'";
+            throw pluginName + ": couldn't find ther parser for type '" + type + "'.";
         }
         return parser.parse(value, this.options.forceNullOnEmpty);
     };
@@ -35,7 +35,9 @@ var NSerializeJson = (function () {
         var value = null;
         if (htmlElement.tagName.toLowerCase() === "select") {
             var firstSelectOpt = Array.from(htmlElement.options).filter(function (x) { return x.selected; })[0];
-            value = firstSelectOpt.getAttribute("value");
+            if (firstSelectOpt) {
+                value = firstSelectOpt.getAttribute("value");
+            }
         }
         else {
             value = htmlElement.value;

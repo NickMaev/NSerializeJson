@@ -5,7 +5,7 @@
 NSerializeJson is a Vanilla JS form serializer which serializes form data into JSON object.
 
 # Changes
-##### v. 1.0.1 (2018-11-10)
+##### v. 1.0.2 (2018-11-11)
 `select` element parsing fix.
 
 # Usage

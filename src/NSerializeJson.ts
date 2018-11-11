@@ -21,7 +21,7 @@ export class NSerializeJson {
         }
         var parser = this.parsers.filter(x => x.name === type)[0];
         if (parser == null) {
-            throw `${pluginName}: couldn't find ther parser for type '${type}'`;
+            throw `${pluginName}: couldn't find ther parser for type '${type}'.`;
         }
         return parser.parse(value, this.options.forceNullOnEmpty);
     }
@@ -48,7 +48,9 @@ export class NSerializeJson {
         var value = null;
         if (htmlElement.tagName.toLowerCase() === "select") {
             var firstSelectOpt = Array.from((htmlElement as any).options).filter(x => (x as any).selected)[0] as any;
-            value = firstSelectOpt.getAttribute("value");
+            if (firstSelectOpt) {
+                value = firstSelectOpt.getAttribute("value");
+            }
         } else {
             value = (htmlElement as any).value;
         }
