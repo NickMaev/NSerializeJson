@@ -5,6 +5,10 @@
 NSerializeJson is a Vanilla JS form serializer which serializes form data into JSON object.
 
 # Changes
+##### v. 1.0.3 (2019-08-13)
+* Dot separator parsing fix.
+* Added more examples.
+
 ##### v. 1.0.2 (2018-11-11)
 `select` element parsing fix.
 
@@ -77,6 +81,49 @@ HTML form:
   <textarea              name="projects[1][language]">TypeScript</textarea>
   <input type="hidden"   name="projects[1][popular]" value="0" />
   <input type="checkbox" name="projects[1][popular]" value="1"/>
+
+  <!-- select -->
+  <select name="selectOne">
+    <option value="paper">Paper</option>
+    <option value="rock" selected>Rock</option>
+    <option value="scissors">Scissors</option>
+  </select>
+
+  <!-- select multiple options, just name it as an array[] -->
+  <select multiple name="selectMultiple[]">
+    <option value="red"  selected>Red</option>
+    <option value="blue" selected>Blue</option>
+    <option value="yellow">Yellow</option>
+	</select>
+</form>
+
+```
+
+HTML form (dot separator):
+```html
+<form id="my-profile">
+  <!-- simple attribute -->
+  <input type="text" name="fullName"              value="Nikolay Maev" />
+
+  <!-- nested attributes -->
+  <input type="text" name="address.city"         value="Rostov-on-Don" />
+  <input type="text" name="address.state.name"  value="Rostov oblast'" />
+  <input type="text" name="address.state.abbr"  value="ROV" />
+
+  <!-- array -->
+  <input type="text" name="jobbies[]"             value="coding" />
+  <input type="text" name="jobbies[]"             value="cycling" />
+
+  <!-- nested arrays, textareas, checkboxes ... -->
+  <textarea              name="projects[0].name">NVal</textarea>
+  <textarea              name="projects[0].language">TypeScript</textarea>
+  <input type="hidden"   name="projects[0].popular" value="0" />
+  <input type="checkbox" name="projects[0].popular" value="1" checked />
+
+  <textarea              name="projects[1].name.">NSerializeJson</textarea>
+  <textarea              name="projects[1].language">TypeScript</textarea>
+  <input type="hidden"   name="projects[1].popular" value="0" />
+  <input type="checkbox" name="projects[1].popular" value="1"/>
 
   <!-- select -->
   <select name="selectOne">
@@ -248,6 +295,8 @@ Allowed options `NSerializeJson.options` to change the default behavior:
   * **useDotSeparatorInPath: false**, if true allows you to use the dot notation instead of brackets in the name attribute (i.e. `<input name="food.fruits[]" value="banana">`).
   * **useNumKeysAsArrayIndex: true**, when using integers as keys (i.e. `<input name="foods[0]" value="banana">`), serialize as an array (`{"foods": ["banana"]}`) instead of an object (`{"foods": {"0": "banana"}`).
   * **onBeforeParseValue: null**, if not null, allows you to prepare the value and return it by this method with signature `(value: string, type: string) => string;`.
+
+Also you may parametrize the serialization method: `.serializeForm(htmlFormElement, options, parsers)`.
 
 More info about options usage in the sections below.
 

@@ -1,13 +1,15 @@
 {
   "name": "nserializejson",
-  "version": "1.0.2",
-  "description": "JSON form serializer on Vanilla JS",
+  "version": "1.0.3",
+  "keywords": [ "json", "form", "serializer", "serialization", "serialize", "vanilla", "jquery.serializeJSON", "html" ],
+  "description": "HTML form JSON serializer on Vanilla JS",
   "scripts": {
     "build:esm": "node ./node_modules/typescript/bin/tsc --project ./tsconfig.json --module es2015 --outDir ./dist/esm -d && node ./process-dts.js",
     "build:cjs": "node ./node_modules/typescript/bin/tsc --project ./tsconfig.json --module commonjs --outDir ./dist/cjs",
     "build": "npm run clean && npm run build:browser && npm run build:esm && npm run build:cjs",
     "build:browser": "node ./node_modules/webpack/bin/webpack.js --config ./webpack.config.js --mode production",
-    "clean": "node ./node_modules/rimraf ./dist"
+    "clean": "node ./node_modules/rimraf ./dist",
+    "watch": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config ./webpack.config.js --mode development"
   },
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -15,22 +17,16 @@
   "umd": "./dist/browser/nserializejson.min.js",
   "umd_name": "NSerializeJson",
   "devDependencies": {
-    "rimraf": "^2.6.2",
-    "uglify-js": "^3.4.7",
-    "babel-core": "^6.26.0",
-    "babel-jest": "^22.4.1",
-    "babel-plugin-external-helpers": "^6.22.0",
-    "babel-plugin-transform-object-assign": "^6.22.0",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-plugin-transform-react-jsx": "^6.24.1",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-es2015-rollup": "^3.0.0",
-    "babel-plugin-add-module-exports": "0.3.3",
-    "babel-loader": "^7.1.5",
-    "webpack": "^4.16.5",
-    "webpack-cli": "^3.1.0",
-    "ts-loader": "^4.4.2",
-    "typescript": "^3.0.1"
+    "@babel/core": "7.5.5",
+    "webpack-dev-server": "3.8.0",
+    "rimraf": "2.6.3",
+    "uglify-js": "3.6.0",
+    "babel-plugin-add-module-exports": "1.0.2",
+    "babel-loader": "8.0.6",
+    "webpack": "4.39.1",
+    "webpack-cli": "3.3.6",
+    "ts-loader": "6.0.4",
+    "typescript": "3.5.3"
   },
   "repository": {
     "type": "git",

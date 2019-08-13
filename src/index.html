@@ -4,18 +4,17 @@
     <meta charset="utf-8" />
     <title></title>
 
-    <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <script src="../dist/browser/nserializejson.min.js"></script>
-    <script src="main.js"></script>
+    <script src="http://localhost:8080/nserializejson.min.js"></script>
+    
     <style>
         .form-control {
             margin-bottom: 10px !important;
         }
     </style>
+
 </head>
 <body>
-
     <div class="row" style="padding: 10px; margin: 0">
 
         <div>
@@ -179,7 +178,7 @@
                 <label>
                     myArray[]:number
                     <input type="text" class="form-control" name="myArray[]:number" value="2" />
-                </label>                
+                </label>
                 <label>
                     myArray[]:number
                     <input type="text" class="form-control" name="myArray[]:number" value="3" />
@@ -287,8 +286,51 @@
         </div>
 
     </div>
-
+    
     <script>
+
+        function serializeToOutput(elForm, useDotSeparatorInPath, elOutput) {
+            var jsonObject = NSerializeJson.NSerializeJson.serializeForm(elForm, { useDotSeparatorInPath });
+            elOutput.value = JSON.stringify(jsonObject, null, "\t");
+        }
+
+        function init() {
+
+            // Braket separator.
+
+            var inputElementNames = "input, select, textarea";
+
+            var elForm = document.getElementById("myForm");
+            var elOutput = document.getElementById("output");
+            serializeToOutput(elForm, false, elOutput);
+            elForm
+                .querySelectorAll(inputElementNames)
+                .forEach(function (el) {
+                    el.addEventListener("change",
+                        function (e) {
+                            e.preventDefault();
+                            serializeToOutput(elForm, elOutput);
+                        });
+                });
+
+            // Dot separator.
+
+            var elFormWithDot = document.getElementById("myForm_dot");
+            var elOutputWithDot = document.getElementById("output_dot");
+
+            serializeToOutput(elFormWithDot, true, elOutputWithDot);
+
+            elFormWithDot
+                .querySelectorAll(inputElementNames)
+                .forEach(function (el) {
+                    el.addEventListener("change",
+                        function (e) {
+                            e.preventDefault();
+                            serializeToOutput(elFormWithDot, elOutputWithDot);
+                        });
+                });
+        }
+
         init();
     </script>
 </body>

@@ -1,20 +1,41 @@
-﻿function init() {
+﻿function serializeToOutput(elForm, useDotSeparatorInPath, elOutput) {
+    var jsonObject = NSerializeJson.NSerializeJson.serializeForm(elForm, { useDotSeparatorInPath });
+    elOutput.value = JSON.stringify(jsonObject, null, "\t");
+}
+
+function init() {
+
+    // Braket separator.
+
+    var inputElementNames = "input, select, textarea";
+
     var elForm = document.getElementById("myForm");
     var elOutput = document.getElementById("output");
-    serializeToOutput(elForm, elOutput);
+    serializeToOutput(elForm, false, elOutput);
     elForm
-        .querySelectorAll("input, select, textarea")
-        .forEach(function(el) {
+        .querySelectorAll(inputElementNames)
+        .forEach(function (el) {
             el.addEventListener("change",
-                function(e) {
-                    e.preventDefault(); 
+                function (e) {
+                    e.preventDefault();
                     serializeToOutput(elForm, elOutput);
                 });
         });
 
-}
+    // Dot separator.
 
-function serializeToOutput(elForm, elOutput) {
-    var jsonObject = NSerializeJson.NSerializeJson.serializeForm(elForm);
-    elOutput.value = JSON.stringify(jsonObject, null, "\t");
+    var elFormWithDot = document.getElementById("myForm_dot");
+    var elOutputWithDot = document.getElementById("output_dot");
+
+    serializeToOutput(elFormWithDot, true, elOutputWithDot);
+
+    elFormWithDot
+        .querySelectorAll(inputElementNames)
+        .forEach(function (el) {
+            el.addEventListener("change",
+                function (e) {
+                    e.preventDefault();
+                    serializeToOutput(elFormWithDot, elOutputWithDot);
+                });
+        });
 }
