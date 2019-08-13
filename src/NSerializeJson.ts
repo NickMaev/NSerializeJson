@@ -22,7 +22,7 @@ export class NSerializeJson {
         }
         var parser = this.parsers.filter(x => x.name === type)[0];
         if (parser == null) {
-            throw `${pluginName}: couldn't find ther parser for type '${type}'.`;
+            throw Error(`${pluginName}: couldn't find ther parser for type '${type}'.`);
         }
         return parser.parse(value, options.forceNullOnEmpty);
     }
@@ -40,7 +40,7 @@ export class NSerializeJson {
         } else {
 
             if (!Array.isArray(parsers)) {
-                throw Error("'parsers' arg in 'serializeForm' method must be an array or null.");
+                throw Error(`${pluginName}: 'parsers' arg in 'serializeForm' method must be an array or null.`);
             }
 
             parsers = { ...this.parsers, ...parsers };
@@ -161,7 +161,7 @@ export class NSerializeJson {
             path = pathStr.split("[").map((x, i) => x.replace("]", ""));
             path.forEach((step, index) => {
                 if (index !== path.length - 1 && isStringNullOrEmpty(step))
-                    throw `${pluginName}: error in path '${pathStr}' empty values in the path mean array and should be at the end.`;
+                    throw Error(`${pluginName}: error in path '${pathStr}' empty values in the path mean array and should be at the end.`);
             });
         }
         
@@ -178,11 +178,10 @@ export class NSerializeJson {
 
         if (currentObj == null || typeof currentObj == "string") {
             path = path.map(x => isStringNullOrEmpty(x) ? "[]" : x);
-            console.log(`${pluginName}: there was an error in path '${path}' in step '${step}'.`);
-            throw `${pluginName}: error.`;
+            throw Error(`${pluginName}: there was an error in path '${path}' in step '${step}'.`);
         }
 
-        console.log("-----------------------")
+        //console.log("-----------------------")
         
         var isArrayStep = isStringNullOrEmpty(step); // If [].
         var isIntegerStep = isStringInteger(step);

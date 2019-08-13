@@ -24,7 +24,7 @@ var NSerializeJson = (function () {
         }
         var parser = this.parsers.filter(function (x) { return x.name === type; })[0];
         if (parser == null) {
-            throw Constants_1.pluginName + ": couldn't find ther parser for type '" + type + "'.";
+            throw Error(Constants_1.pluginName + ": couldn't find ther parser for type '" + type + "'.");
         }
         return parser.parse(value, options.forceNullOnEmpty);
     };
@@ -41,7 +41,7 @@ var NSerializeJson = (function () {
         }
         else {
             if (!Array.isArray(parsers)) {
-                throw Error("'parsers' arg in 'serializeForm' method must be an array or null.");
+                throw Error(Constants_1.pluginName + ": 'parsers' arg in 'serializeForm' method must be an array or null.");
             }
             parsers = __assign({}, this.parsers, parsers);
         }
@@ -135,7 +135,7 @@ var NSerializeJson = (function () {
             path = pathStr.split("[").map(function (x, i) { return x.replace("]", ""); });
             path.forEach(function (step, index) {
                 if (index !== path.length - 1 && Util_1.isStringNullOrEmpty(step))
-                    throw Constants_1.pluginName + ": error in path '" + pathStr + "' empty values in the path mean array and should be at the end.";
+                    throw Error(Constants_1.pluginName + ": error in path '" + pathStr + "' empty values in the path mean array and should be at the end.");
             });
         }
         this.searchAndSet(options, obj, path, 0, parsedValue);
@@ -148,10 +148,8 @@ var NSerializeJson = (function () {
         var nextStep = path[pathIndex + 1];
         if (currentObj == null || typeof currentObj == "string") {
             path = path.map(function (x) { return Util_1.isStringNullOrEmpty(x) ? "[]" : x; });
-            console.log(Constants_1.pluginName + ": there was an error in path '" + path + "' in step '" + step + "'.");
-            throw Constants_1.pluginName + ": error.";
+            throw Error(Constants_1.pluginName + ": there was an error in path '" + path + "' in step '" + step + "'.");
         }
-        console.log("-----------------------");
         var isArrayStep = Util_1.isStringNullOrEmpty(step);
         var isIntegerStep = Util_1.isStringInteger(step);
         var isNextStepAnArray = Util_1.isStringInteger(nextStep) || nextStep == "";

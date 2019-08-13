@@ -1,6 +1,6 @@
 {
   "name": "nserializejson",
-  "version": "1.0.3",
+  "version": "1.0.31",
   "keywords": [ "json", "form", "serializer", "serialization", "serialize", "vanilla", "jquery.serializeJSON", "html" ],
   "description": "HTML form JSON serializer on Vanilla JS",
   "scripts": {

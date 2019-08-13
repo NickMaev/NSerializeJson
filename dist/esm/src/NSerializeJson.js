@@ -22,7 +22,7 @@ var NSerializeJson = (function () {
         }
         var parser = this.parsers.filter(function (x) { return x.name === type; })[0];
         if (parser == null) {
-            throw pluginName + ": couldn't find ther parser for type '" + type + "'.";
+            throw Error(pluginName + ": couldn't find ther parser for type '" + type + "'.");
         }
         return parser.parse(value, options.forceNullOnEmpty);
     };
@@ -39,7 +39,7 @@ var NSerializeJson = (function () {
         }
         else {
             if (!Array.isArray(parsers)) {
-                throw Error("'parsers' arg in 'serializeForm' method must be an array or null.");
+                throw Error(pluginName + ": 'parsers' arg in 'serializeForm' method must be an array or null.");
             }
             parsers = __assign({}, this.parsers, parsers);
         }
@@ -133,7 +133,7 @@ var NSerializeJson = (function () {
             path = pathStr.split("[").map(function (x, i) { return x.replace("]", ""); });
             path.forEach(function (step, index) {
                 if (index !== path.length - 1 && isStringNullOrEmpty(step))
-                    throw pluginName + ": error in path '" + pathStr + "' empty values in the path mean array and should be at the end.";
+                    throw Error(pluginName + ": error in path '" + pathStr + "' empty values in the path mean array and should be at the end.");
             });
         }
         this.searchAndSet(options, obj, path, 0, parsedValue);
@@ -146,10 +146,8 @@ var NSerializeJson = (function () {
         var nextStep = path[pathIndex + 1];
         if (currentObj == null || typeof currentObj == "string") {
             path = path.map(function (x) { return isStringNullOrEmpty(x) ? "[]" : x; });
-            console.log(pluginName + ": there was an error in path '" + path + "' in step '" + step + "'.");
-            throw pluginName + ": error.";
+            throw Error(pluginName + ": there was an error in path '" + path + "' in step '" + step + "'.");
         }
-        console.log("-----------------------");
         var isArrayStep = isStringNullOrEmpty(step);
         var isIntegerStep = isStringInteger(step);
         var isNextStepAnArray = isStringInteger(nextStep) || nextStep == "";
