@@ -57,71 +57,80 @@ var NSerializeJson = (function () {
         checkedElements.forEach(function (x) { return _this.serializeIntoObject(options, parsers, resultObject, x); });
         return resultObject;
     };
-    NSerializeJson.serializeIntoObject = function (options, parsers, obj, htmlElement) {
+    NSerializeJson.serializeIntoObject = function (options, parsers, resultObject, htmlElement) {
         var value = null;
-        if (htmlElement.tagName.toLowerCase() === "select") {
-            var firstSelectOpt = Array.from(htmlElement.options).filter(function (x) { return x.selected; })[0];
-            if (firstSelectOpt) {
-                value = firstSelectOpt.getAttribute("value");
+        var tagName = htmlElement.tagName.toLowerCase();
+        var nameAttr = htmlElement.getAttribute("name");
+        var isMultiSelect = false;
+        if (tagName === "select") {
+            var selectElement = htmlElement;
+            isMultiSelect = selectElement.multiple == true;
+            var selectedOptionValues = Array
+                .from(selectElement.options)
+                .filter(function (x) { return x.selected; })
+                .map(function (x) { return x.getAttribute("value"); });
+            if (selectedOptionValues) {
+                value = selectedOptionValues;
             }
         }
         else {
             value = htmlElement.value;
         }
-        var pathStr = htmlElement.getAttribute("name");
-        if (isStringNullOrEmpty(pathStr))
-            return obj;
-        var path = [];
-        var type = null;
-        var typeIndex = pathStr.indexOf(":");
+        if (isStringNullOrEmpty(nameAttr))
+            return resultObject;
+        var valueType = null;
+        var typeIndex = nameAttr.indexOf(":");
         if (typeIndex > -1) {
-            type = pathStr.substring(typeIndex + 1, pathStr.length);
-            if (type === "skip") {
-                return obj;
+            valueType = nameAttr.substring(typeIndex + 1, nameAttr.length);
+            if (valueType === "skip") {
+                return resultObject;
             }
-            pathStr = pathStr.substring(0, typeIndex);
+            nameAttr = nameAttr.substring(0, typeIndex);
         }
         else {
-            type = htmlElement.getAttribute("data-value-type");
+            valueType = htmlElement.getAttribute("data-value-type");
         }
+        var path = [];
         if (options.onBeforeParseValue != null) {
-            value = options.onBeforeParseValue(value, type);
+            value = options.onBeforeParseValue(value, valueType);
         }
-        var parsedValue = this.parseValue(options, parsers, value, type);
+        var parsedValue = this.parseValue(options, parsers, value, valueType);
         if (options.useDotSeparatorInPath) {
             var addArrayToPath = false;
-            path = pathStr.split(".");
+            path = nameAttr.split(".");
             var pathIndexShift = 0;
-            for (var index = 0; index < path.length; index++) {
-                var step = path[index + pathIndexShift];
+            for (var pathIndex = 0; pathIndex < path.length; pathIndex++) {
+                var step = path[pathIndex + pathIndexShift];
                 if (step === undefined)
                     continue;
-                var indexOfBrackets = step.indexOf("[]");
-                if (indexOfBrackets === -1) {
-                    var leftBracketIndex = step.indexOf("["), rightBracketIndex = step.indexOf("]");
-                    if (leftBracketIndex !== -1 && rightBracketIndex !== -1) {
-                        var arrayContent = step.slice(leftBracketIndex + 1, rightBracketIndex);
-                        path[index + pathIndexShift] = step.replace("[" + arrayContent + "]", "");
-                        if (!isStringNullOrEmpty(arrayContent) && !isStringInteger(arrayContent)) {
-                            throw Error("Path '" + pathStr + "' must be empty or contain a number in array brackets.");
-                        }
-                        if (arrayContent) {
-                            path.splice(index + pathIndexShift + 1, 0, arrayContent);
-                        }
-                        pathIndexShift++;
-                    }
-                }
-                else {
-                    if (index !== path.length - 1) {
-                        if (indexOfBrackets > -1 && indexOfBrackets !== path.length - 1) {
-                            throw pluginName + ": error in path '" + pathStr + "' empty values in the path mean array and should be at the end.";
-                        }
+                var emptyBrackets = "[]";
+                var indexOfBrackets = step.indexOf(emptyBrackets);
+                var hasEmptyBrackets = indexOfBrackets > -1;
+                if (hasEmptyBrackets) {
+                    if (pathIndex !== path.length - 1) {
+                        throw pluginName + ": error in path '" + nameAttr + "' empty values in the path mean array and should be at the end.";
                     }
                     else {
                         if (indexOfBrackets > -1) {
-                            path[index + pathIndexShift] = step.replace("[]", "");
-                            addArrayToPath = true;
+                            path[pathIndex + pathIndexShift] = step.replace(emptyBrackets, "");
+                            if (!isMultiSelect) {
+                                addArrayToPath = true;
+                            }
                         }
+                    }
+                }
+                else {
+                    var leftBracketIndex = step.indexOf("["), rightBracketIndex = step.indexOf("]");
+                    if (leftBracketIndex !== -1 && rightBracketIndex !== -1) {
+                        var arrayContent = step.slice(leftBracketIndex + 1, rightBracketIndex);
+                        path[pathIndex + pathIndexShift] = step.replace("[" + arrayContent + "]", "");
+                        if (!isStringNullOrEmpty(arrayContent) && !isStringInteger(arrayContent)) {
+                            throw Error("Path '" + nameAttr + "' must be empty or contain a number in array brackets.");
+                        }
+                        if (arrayContent) {
+                            path.splice(pathIndex + pathIndexShift + 1, 0, arrayContent);
+                        }
+                        pathIndexShift++;
                     }
                 }
             }
@@ -130,19 +139,32 @@ var NSerializeJson = (function () {
             }
         }
         else {
-            path = pathStr.split("[").map(function (x, i) { return x.replace("]", ""); });
-            path.forEach(function (step, index) {
-                if (index !== path.length - 1 && isStringNullOrEmpty(step))
-                    throw Error(pluginName + ": error in path '" + pathStr + "' empty values in the path mean array and should be at the end.");
+            path = nameAttr.split("[").map(function (x, i) { return x.replace("]", ""); });
+            path.forEach(function (step, pathIndex) {
+                var isLastStep = pathIndex === path.length - 1;
+                if (!isLastStep && isStringNullOrEmpty(step)) {
+                    throw Error(pluginName + ": error in path '" + nameAttr + "' empty values in the path mean array and should be at the end.");
+                }
             });
         }
-        this.searchAndSet(options, obj, path, 0, parsedValue);
-        return obj;
+        this.searchAndSet(options, isMultiSelect, resultObject, path, 0, parsedValue);
+        return resultObject;
     };
-    NSerializeJson.searchAndSet = function (options, currentObj, path, pathIndex, parsedValue, arrayInternalIndex) {
+    NSerializeJson.searchAndSet = function (options, isMultiSelect, currentObj, path, pathIndex, parsedValue, arrayInternalIndex) {
         if (arrayInternalIndex === void 0) { arrayInternalIndex = 0; }
         var step = path[pathIndex];
-        var isFinalStep = pathIndex === path.length - 1;
+        if (step == undefined) {
+            step = null;
+        }
+        var isLastStep = true;
+        if (isMultiSelect) {
+            if (!options.useDotSeparatorInPath && path.length > 1 && isStringNullOrEmpty(step)) {
+                isLastStep = pathIndex === path.length - 2;
+            }
+        }
+        else {
+            isLastStep = pathIndex === path.length - 1;
+        }
         var nextStep = path[pathIndex + 1];
         if (currentObj == null || typeof currentObj == "string") {
             path = path.map(function (x) { return isStringNullOrEmpty(x) ? "[]" : x; });
@@ -152,15 +174,20 @@ var NSerializeJson = (function () {
         var isIntegerStep = isStringInteger(step);
         var isNextStepAnArray = isStringInteger(nextStep) || nextStep == "";
         if (isArrayStep) {
-            if (isFinalStep) {
-                currentObj.push(parsedValue);
+            if (isLastStep) {
+                if (isMultiSelect && !options.useDotSeparatorInPath) {
+                }
+                else {
+                }
+                if (!isMultiSelect) {
+                    currentObj.push(parsedValue);
+                }
                 return;
             }
             else {
                 if (currentObj[arrayInternalIndex] == null) {
                     currentObj[arrayInternalIndex] = {};
                 }
-                step = arrayInternalIndex;
                 arrayInternalIndex++;
             }
         }
@@ -169,7 +196,7 @@ var NSerializeJson = (function () {
             if (!isArray(currentObj)) {
                 currentObj = [];
             }
-            if (isFinalStep) {
+            if (isLastStep) {
                 currentObj[arrayKey] = parsedValue;
                 return;
             }
@@ -180,7 +207,7 @@ var NSerializeJson = (function () {
             }
         }
         else {
-            if (isFinalStep) {
+            if (isLastStep) {
                 currentObj[step] = parsedValue;
                 return;
             }
@@ -202,7 +229,7 @@ var NSerializeJson = (function () {
             }
         }
         pathIndex++;
-        this.searchAndSet(options, currentObj[step], path, pathIndex, parsedValue, arrayInternalIndex);
+        this.searchAndSet(options, isMultiSelect, currentObj[step], path, pathIndex, parsedValue, arrayInternalIndex);
     };
     NSerializeJson.options = {
         useNumKeysAsArrayIndex: true,

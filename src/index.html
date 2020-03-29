@@ -147,6 +147,38 @@
                     json[not empty]:json
                     <input type="text" class="form-control" name="json[not empty]:json" value='{"my": "stuff"}' />
                 </label>
+                <!--<label>
+                    parentOfMultipleSelect[nestedMultipleSelect]
+                    <select class="form-control" multiple name="parentOfMultipleSelect[nestedMultipleSelect]">
+                        <option value="red" selected>Red</option>
+                        <option value="blue" selected>Blue</option>
+                        <option value="yellow">Yellow</option>
+                    </select>
+                </label>-->
+                <label>
+                    selectMultipleByDefault
+                    <select class="form-control" multiple name="selectMultipleByDefault">
+                        <option value="red" selected>Red</option>
+                        <option value="blue" selected>Blue</option>
+                        <option value="yellow">Yellow</option>
+                    </select>
+                </label>
+                <label>
+                    selectMultipleAsArray[]
+                    <select class="form-control" multiple name="selectMultipleAsArray[]">
+                        <option value="red" selected>Red</option>
+                        <option value="blue" selected>Blue</option>
+                        <option value="yellow">Yellow</option>
+                    </select>
+                </label>
+                <label>
+                    selectMultipleAsArrayOfNumbers[]:number
+                    <select class="form-control" multiple name="selectMultipleAsArrayOfNumbers[]:number">
+                        <option value="1" selected>Red</option>
+                        <option value="2" selected>Blue</option>
+                        <option value="3">Yellow</option>
+                    </select>
+                </label>
             </form>
         </div>
 
@@ -275,6 +307,31 @@
                     json.not empty:json
                     <input type="text" class="form-control" name="json.not empty:json" value='{"my": "stuff"}' />
                 </label>
+                <br />
+                <label>
+                    selectMultipleByDefault
+                    <select class="form-control" multiple name="selectMultipleByDefault">
+                        <option value="red" selected>Red</option>
+                        <option value="blue" selected>Blue</option>
+                        <option value="yellow">Yellow</option>
+                    </select>
+                </label>
+                <label>
+                    selectMultipleAsArray[]
+                    <select class="form-control" multiple name="selectMultipleAsArray[]">
+                        <option value="red" selected>Red</option>
+                        <option value="blue" selected>Blue</option>
+                        <option value="yellow">Yellow</option>
+                    </select>
+                </label>
+                <label>
+                    selectMultipleAsArrayOfNumbers[]:number
+                    <select class="form-control" multiple name="selectMultipleAsArrayOfNumbers[]:number">
+                        <option value="1" selected>Red</option>
+                        <option value="2" selected>Blue</option>
+                        <option value="3">Yellow</option>
+                    </select>
+                </label>
             </form>
         </div>
 
@@ -309,7 +366,7 @@
                     el.addEventListener("change",
                         function (e) {
                             e.preventDefault();
-                            serializeToOutput(elForm, elOutput);
+                            serializeToOutput(elForm, false, elOutput);
                         });
                 });
 
@@ -326,7 +383,7 @@
                     el.addEventListener("change",
                         function (e) {
                             e.preventDefault();
-                            serializeToOutput(elFormWithDot, elOutputWithDot);
+                            serializeToOutput(elFormWithDot, true, elOutputWithDot);
                         });
                 });
         }

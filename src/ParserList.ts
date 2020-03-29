@@ -1,32 +1,27 @@
 ﻿import { IValueParser } from "./IValueParser";
-import { isStringNumber, isStringJsonObject, isStringNullOrEmpty } from "./Util";
+import { isStringNumber, isStringJsonObject, isStringNullOrEmpty, isArray } from "./Util";
 
 export const parserList : IValueParser[] = [
         {
             name: "auto",
             parse: (val: any, forceNull: boolean): any => {
+                if (isArray(val)) {
+                    return val;
+                }
                 if (isStringNullOrEmpty(val)) {
                     return forceNull ? null : val;
                 }
                 var result = val.toString().trim();
                 if(result.toLowerCase() === "null")
                     return null;
+                if (isStringNumber(val)) {
+                    return parseFloat(val);
+                }
                 try {
                     result = JSON.parse(result);
                     return result;
                 } catch(e) {
 
-                }
-                var array = result.split(",");
-                if (array.length > 1) {
-                    result = array.map(x => {
-                        if (isStringNumber(x)) {
-                            return parseFloat(x);
-                        } else if(isStringJsonObject(x)) {
-                            return JSON.parse(x);
-                        }
-                        return x.trim();
-                    });
                 }
                 return result;
             }
@@ -34,6 +29,12 @@ export const parserList : IValueParser[] = [
         {
             name: "number",
             parse: (val: any, forceNull: boolean): any => {
+                if (isArray(val)) {
+                    return val.map(x => parseInt(x));
+                }
+                if (typeof val === "number") {
+                    return val;
+                }
                 if (isStringNullOrEmpty(val)) {
                     return forceNull ? null : 0;
                 }

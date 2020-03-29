@@ -5,29 +5,23 @@ exports.parserList = [
     {
         name: "auto",
         parse: function (val, forceNull) {
+            if (Util_1.isArray(val)) {
+                return val;
+            }
             if (Util_1.isStringNullOrEmpty(val)) {
                 return forceNull ? null : val;
             }
             var result = val.toString().trim();
             if (result.toLowerCase() === "null")
                 return null;
+            if (Util_1.isStringNumber(val)) {
+                return parseFloat(val);
+            }
             try {
                 result = JSON.parse(result);
                 return result;
             }
             catch (e) {
-            }
-            var array = result.split(",");
-            if (array.length > 1) {
-                result = array.map(function (x) {
-                    if (Util_1.isStringNumber(x)) {
-                        return parseFloat(x);
-                    }
-                    else if (Util_1.isStringJsonObject(x)) {
-                        return JSON.parse(x);
-                    }
-                    return x.trim();
-                });
             }
             return result;
         }
@@ -35,6 +29,12 @@ exports.parserList = [
     {
         name: "number",
         parse: function (val, forceNull) {
+            if (Util_1.isArray(val)) {
+                return val.map(function (x) { return parseInt(x); });
+            }
+            if (typeof val === "number") {
+                return val;
+            }
             if (Util_1.isStringNullOrEmpty(val)) {
                 return forceNull ? null : 0;
             }

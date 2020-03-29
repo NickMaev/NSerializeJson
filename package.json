@@ -1,7 +1,16 @@
 {
   "name": "nserializejson",
-  "version": "1.0.31",
-  "keywords": [ "json", "form", "serializer", "serialization", "serialize", "vanilla", "jquery.serializeJSON", "html" ],
+  "version": "1.0.32-alpha.1",
+  "keywords": [
+    "json",
+    "form",
+    "serializer",
+    "serialization",
+    "serialize",
+    "vanilla",
+    "jquery.serializeJSON",
+    "html"
+  ],
   "description": "HTML form JSON serializer on Vanilla JS",
   "scripts": {
     "build:esm": "node ./node_modules/typescript/bin/tsc --project ./tsconfig.json --module es2015 --outDir ./dist/esm -d && node ./process-dts.js",

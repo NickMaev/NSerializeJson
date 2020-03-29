@@ -18,7 +18,7 @@ function init() {
             el.addEventListener("change",
                 function (e) {
                     e.preventDefault();
-                    serializeToOutput(elForm, elOutput);
+                    serializeToOutput(elForm, false, elOutput);
                 });
         });
 
@@ -35,7 +35,7 @@ function init() {
             el.addEventListener("change",
                 function (e) {
                     e.preventDefault();
-                    serializeToOutput(elFormWithDot, elOutputWithDot);
+                    serializeToOutput(elFormWithDot, true, elOutputWithDot);
                 });
         });
 }
